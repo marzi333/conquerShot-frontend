@@ -1,8 +1,9 @@
 import logo from "./logo.svg";
 import "./App.css";
+import PlayerProfile from "./pages/PlayerProfile/PlayerProfile";
 
 function App() {
-  return <div className="App">ConquerShot</div>;
+  return <PlayerProfile />;
 }
 
 export default App;
