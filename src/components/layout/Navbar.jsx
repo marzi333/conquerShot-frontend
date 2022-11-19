@@ -28,8 +28,30 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import logo from "../../assets/logo.png";
 import profilePic from "../../assets/user1photo.jpg";
 import React, { useState, useContext } from "react";
+import {bounce} from "react-animations";
+import styled, { keyframes } from "styled-components";
+import star from "../../assets/star.png";
+import kingdom from "../../assets/tumtopia.jpg"
 
-const Navbar = () => {
+const Navbar = ({toggleScoreUpdate}) => {
+  const BounceInAnimation = keyframes`${bounce}`;
+    const BounceInDiv = styled.div`animation: infinite 5s ${BounceInAnimation};`;
+    const [scoreImg,setScoreImg] = useState(<div><img src={star} style={{height:"30px"}} /></div>)
+    React.useEffect(() => {
+      if(toggleScoreUpdate === true)
+      {
+        setScoreImg(<BounceInDiv>
+          <img src={star} style={{height:"30px"}} />
+      </BounceInDiv>)
+        setTimeout(() => {
+          setScoreImg(<div><img src={star} style={{height:"30px"}} /></div>)
+        }, 1000);
+      }
+      return () => {
+        setScoreImg(<div><img src={star} style={{height:"30px"}} /></div>)
+      }
+    }, [toggleScoreUpdate])
+    
   return (
     <BottomNavigation
   showLabels
@@ -39,8 +61,10 @@ const Navbar = () => {
   // }}
 >
   <BottomNavigationAction label="Johannes" icon={<Avatar src={profilePic}/>} />
-  <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-  <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+  <BottomNavigationAction label="Score" icon={scoreImg}>
+  
+            </BottomNavigationAction>
+  <BottomNavigationAction label={<><b>Kingdom:</b> TumTopia</>} icon={<Avatar src={kingdom} />} />
 </BottomNavigation>
   )
 }

@@ -1,105 +1,85 @@
 import React from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, SVGOverlay, Rectangle } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import "./styles.css";
-import markerIconRed from "../../assets/marker-icon-red.png";
-import markerIconBlue from "../../assets/marker-icon-blue.png";
 import markerIconGreen from "../../assets/marker-icon-green.png";
+import conqueredIcon from "../../assets/conquered.png";
 import { Icon } from "leaflet";
 import Legend from "./Legend";
 import ChangeView from "./ChangeView";
-
+import { IconButton, Input } from "@mui/material";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 export default function Map({
   searchOptionIndex,
   longitude,
   latitude,
-  markersRes,
+  userId,
+  issues,
+  tiles,
   mapZoom,
   searchClicked,
+  handleUploadIssuePic
 }) {
   const [map, setMap] = React.useState(null);
   const [optionIndexChanged, setOptionIndexChanged] = React.useState(false);
-  const [center] = React.useState(
-    latitude !== null &&
-      longitude !== null &&
-      latitude !== undefined &&
-      longitude !== undefined
-      ? [latitude, longitude]
-      : [48.136642566675825, 11.575330343104591]
-  );
-
-  // React.useEffect(() => {
-  //   function resetMap() {
-  //     setOptionIndexChanged(true);
-  //   }
-  //   resetMap();
-  // }, [searchOptionIndex]);
+  const [center] = React.useState([48.136642566675825, 11.575330343104591]);
 
   return (
     <div id="map">
       {/* map */}
-      <MapContainer
-        center={center}
-        zoom={mapZoom}
-        scrollWheelZoom={true}
-        whenCreated={setMap}
-      >
-        
-        {/* build map tiles*/}
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {/* center location marker */}
-        <Marker
-          position={center}
-          icon={
-            new Icon({
-              iconUrl: markerIconGreen,
-              iconSize: [25, 41],
-              iconAnchor: [12, 41],
-            })
-          }
-        />
-        {/* freelancers markers */}
-        {/* {markersRes.map(
-          (freelancer, index) =>
-            freelancer &&
-            (freelancer?.latitude ||
-              freelancer?.defaultAvailability?.centerLocation?.longitude) && (
-              <Marker
-                key={index}
-                position={
-                  freelancer?.latitude && freelancer?.longitude
-                    ? [freelancer?.latitude, freelancer?.longitude]
-                    : [
-                        freelancer?.defaultAvailability?.centerLocation
-                          ?.latitude,
-                        freelancer?.defaultAvailability?.centerLocation
-                          ?.longitude,
-                      ]
-                }
-                icon={
-                  new Icon({
-                    iconUrl: freelancer?.locationStatus
-                      ? freelancer?.locationStatus === "AtSalon"
-                        ? markerIconRed
-                        : markerIconBlue
-                      : freelancer?.defaultAvailability?.locationStatus ===
-                        "AtSalon"
-                      ? markerIconRed
-                      : markerIconBlue,
+          <MapContainer center={center} zoom={mapZoom} scrollWheelZoom={false}>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                  })
-                }
-              >
-              </Marker>
-            )
-        )} */}
-        {/* map legend */}
-        <Legend map={map} />
-      </MapContainer>
-    </div>
+            {
+              issues.map((issue, index)=>
+                {return issue.submissions.find((submission)=>parseInt(submission.user_id) === userId) === undefined ? 
+                <Marker 
+                key = {index} 
+                
+                position={[issue.latitude,issue.longitude]} 
+                icon={new Icon({iconUrl: markerIconGreen})}>
+                  <Popup>
+                    Fix Issue?
+                    <IconButton>
+                    <label htmlFor="contained-button-file1">
+                    
+                            <Input
+                              accept="image/*"
+                              id="contained-button-file1"
+                              type="file"
+                              style={{ display: "none" }}
+                              onChange={(event) => {
+                                handleUploadIssuePic(issue,event);
+                              }}
+                            />
+                          
+                      <CameraAltIcon/>
+                      
+                    
+                    </label>
+                    </IconButton>
+                  </Popup>
+                </Marker>:
+                <Marker 
+                key = {index} 
+                position={[issue.latitude,issue.longitude]} 
+                icon={new Icon({iconUrl: conqueredIcon, iconSize:[50,50]})}>
+                </Marker>} 
+  
+              )
+            }
+            {tiles.map((tile,index) => 
+              <Rectangle key={index} bounds={tile.bounds} pathOptions={
+                parseInt(tile.user_id) === 1 ? { color: 'blue', opacity: 0.5 }:
+                parseInt(tile.user_id) === 2 ? { color: 'orange', opacity: 0.5 }:
+                parseInt(tile.user_id) === 3 ? { color: 'red', opacity: 0.5 }:
+                { color: 'purple', opacity: 0.5 }
+              } />
+            )}
+          </MapContainer> 
+          </div>
   );
 }
