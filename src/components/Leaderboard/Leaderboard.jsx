@@ -1,4 +1,4 @@
-import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import {Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography} from '@mui/material'
 import React from 'react'
 
 import firstPrize from '../../assets/gold-cup.png';
@@ -12,56 +12,46 @@ import user4Pic from '../../assets/user4photo.jpg';
 
 
 const Leaderboard = ({leaderboard}) => {
-    
-    const userAvatars = [user1Pic,user2Pic,user3Pic,user4Pic];
+
+    const userAvatars = [user1Pic, user2Pic, user3Pic, user4Pic];
     const sortLeaderboard = (leaderboard) => {
-        leaderboard.sort(function(a, b) {
+        leaderboard.sort(function (a, b) {
             return b.score - a.score;
         });
     }
     React.useEffect(() => {
-      sortLeaderboard(leaderboard);
+        sortLeaderboard(leaderboard);
     }, [])
-    
-  return (
-    <List>
-        
-        {console.log(leaderboard)}
-        {leaderboard.map((user, index)=>
-        <>
-        <Divider/>
-        <ListItem
-        key={index}
-        >
-            {console.log(index)}
-        {index===0?<ListItemAvatar>
-          <Avatar alt="first-prize" src={firstPrize} />
-        </ListItemAvatar>:
-        index===1?<ListItemAvatar>
-        <Avatar alt="second-prize" src={secondPrize} />
-        </ListItemAvatar>:
-        index===2?<ListItemAvatar>
-        <Avatar alt="third-prize" src={thirdPrize} />
-        </ListItemAvatar>:null
-        }
-        <ListItemText>
-        <Typography
-                sx={{ display: 'inline' }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                {user.user_name}
-              </Typography>
-              
-        <Avatar alt="profile-pic" src={userAvatars[user.user_id]} />
-        </ListItemText>
-        </ListItem>
-        
-        </>
-        )}
-    </List>
-  )
+
+    return (
+        <List>
+
+            {console.log(leaderboard)}
+            {leaderboard.map((user, index) =>
+                <>
+                    <Divider/>
+                    <ListItem
+                        key={index}
+                    >
+                        {console.log(index)}
+                        {index === 0 ? <ListItemAvatar>
+                                <Avatar alt="first-prize" src={firstPrize}/>
+                            </ListItemAvatar> :
+                            index === 1 ? <ListItemAvatar>
+                                    <Avatar alt="second-prize" src={secondPrize}/>
+                                </ListItemAvatar> :
+                                index === 2 ? <ListItemAvatar>
+                                    <Avatar alt="third-prize" src={thirdPrize}/>
+                                </ListItemAvatar> : null
+                        }
+                        <Avatar alt="profile-pic" src={userAvatars[user.user_id]}/>
+                        <ListItemText style={({marginLeft: '10px' })} primary={user.user_name} secondary={"Score: " + user.score} />
+                    </ListItem>
+
+                </>
+            )}
+        </List>
+    )
 }
 
 export default Leaderboard
