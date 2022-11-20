@@ -64,7 +64,7 @@ const Navbar = ({toggleScoreUpdate}) => {
   // }}
 >
   <BottomNavigationAction label="Johannes" icon={<Avatar src={user2Pic}/>} />
-  <BottomNavigationAction label="Score" icon={scoreImg}>
+  <BottomNavigationAction label={<><b>Score:</b> 625</>} icon={scoreImg}>
   
             </BottomNavigationAction>
   <BottomNavigationAction label={<><b>Kingdom:</b> TumTopia</>} icon={<Avatar src={kingdom} />} />
