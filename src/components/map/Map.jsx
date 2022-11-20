@@ -3,6 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, SVGOverlay, Rectangle } from "r
 import "leaflet/dist/leaflet.css";
 import "./styles.css";
 import markerIconGreen from "../../assets/marker-icon-green.png";
+import castleIcon from "../../assets/castle.png";
+import towerIcon from "../../assets/tower.png";
+import villageIcon from "../../assets/village.png";
 import conqueredIcon from "../../assets/conquered.png";
 import { Icon } from "leaflet";
 import Legend from "./Legend";
@@ -23,7 +26,7 @@ export default function Map({
   const [map, setMap] = React.useState(null);
   const [optionIndexChanged, setOptionIndexChanged] = React.useState(false);
   const [center] = React.useState([48.136642566675825, 11.575330343104591]);
-
+  const icons  = {'tower':towerIcon, 'castle':castleIcon, 'village':villageIcon}
   return (
     <div id="map">
       {/* map */}
@@ -39,10 +42,13 @@ export default function Map({
                 <Marker 
                 key = {index} 
                 
-                position={[issue.latitude,issue.longitude]} 
-                icon={new Icon({iconUrl: markerIconGreen})}>
-                  <Popup>
-                    Fix Issue?
+                position={[issue.latitude,issue.longitude]}
+                icon={new Icon({iconUrl: icons[issue.icon], iconSize:[50,50]})}>
+                  <Popup className="request-popup">
+                    <div>
+                      <img  height={50} width={50} src={icons[issue.icon]}></img>
+                    </div>
+                    <h3>Want to conquer this {issue.icon}? Take a picture of the road here!</h3>
                     <IconButton>
                     <label htmlFor="contained-button-file1">
                     
@@ -71,13 +77,14 @@ export default function Map({
   
               )
             }
-            {tiles.map((tile,index) => 
-              <Rectangle key={index} bounds={tile.bounds} pathOptions={
-                parseInt(tile.user_id) === 1 ? { color: 'blue', opacity: 0.5 }:
-                parseInt(tile.user_id) === 2 ? { color: 'orange', opacity: 0.5 }:
-                parseInt(tile.user_id) === 3 ? { color: 'red', opacity: 0.5 }:
-                { color: 'purple', opacity: 0.5 }
-              } />
+            {tiles.map((tile,index) =>
+
+              <Rectangle weight={0.5} key={index} bounds={tile.bounds} pathOptions={
+                parseInt(tile.user_id) === 1 ? { color: 'blue', opacity: tile.opacity, fillOpacity: tile.opacity}:
+                parseInt(tile.user_id) === 2 ? { color: 'orange', opacity: tile.opacity, fillOpacity: tile.opacity}:
+                parseInt(tile.user_id) === 3 ? { color: 'red', opacity: tile.opacity, fillOpacity: tile.opacity}:
+                { color: 'purple', opacity: tile.opacity, fillOpacity: tile.opacity}
+              } ></Rectangle>
             )}
           </MapContainer> 
           </div>

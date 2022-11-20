@@ -7,3 +7,15 @@
   background: transparent;
   border: none;
 }
+
+.leaflet-popup-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  padding-top: 10px;
+}
+
+.leaflet-popup-content > div, h3 {
+  text-align: center;
+}
