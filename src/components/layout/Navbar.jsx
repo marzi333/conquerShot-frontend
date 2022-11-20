@@ -24,7 +24,10 @@ import {
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-
+import user1Pic from '../../assets/user1photo.jpg';
+import user2Pic from '../../assets/user2photo.jpg';
+import user3Pic from '../../assets/user3photo.jpg';
+import user4Pic from '../../assets/user4photo.jpg';
 import logo from "../../assets/logo.png";
 import profilePic from "../../assets/user1photo.jpg";
 import React, { useState, useContext } from "react";
@@ -60,7 +63,7 @@ const Navbar = ({toggleScoreUpdate}) => {
   //   setValue(newValue);
   // }}
 >
-  <BottomNavigationAction label="Johannes" icon={<Avatar src={profilePic}/>} />
+  <BottomNavigationAction label="Johannes" icon={<Avatar src={user2Pic}/>} />
   <BottomNavigationAction label="Score" icon={scoreImg}>
   
             </BottomNavigationAction>

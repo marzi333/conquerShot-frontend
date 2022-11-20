@@ -8,6 +8,7 @@ import castleIcon from "../../assets/castle.png";
 import towerIcon from "../../assets/tower.png";
 import villageIcon from "../../assets/village.png";
 import conqueredIcon from "../../assets/conquered.png";
+import flagIcon from "../../assets/flag.png";
 import swords from "../../assets/swords.png";
 import { Icon } from "leaflet";
 import Legend from "./Legend";
@@ -89,7 +90,7 @@ export default function Map({
                     <div>
                       <img  height={50} width={50} src={icons[issue.icon]}></img>
                     </div>
-                    <h3>Want to conquer this {issue.icon}? Take a picture of the road here!</h3>
+                    <h3>Want to conquer this {issue.icon}? Take a picture of the road or walkway here!</h3>
                     <IconButton>
                     <label htmlFor="contained-button-file1">
                     
@@ -113,7 +114,7 @@ export default function Map({
                 <Marker 
                 key = {index} 
                 position={[issue.latitude,issue.longitude]} 
-                icon={new Icon({iconUrl: conqueredIcon, iconSize:[50,50]})}>
+                icon={new Icon({iconUrl: flagIcon, iconSize:[50,50]})}>
                 </Marker>} 
   
               )
@@ -121,11 +122,8 @@ export default function Map({
             {tiles.map((tile,index) =>
 
               <Rectangle weight={0.5} key={index} bounds={tile.bounds} pathOptions={
-                parseInt(tile.user_id) === 1 ? { color: 'blue', opacity: tile.opacity, fillOpacity: tile.opacity}:
-                parseInt(tile.user_id) === 2 ? { color: 'orange', opacity: tile.opacity, fillOpacity: tile.opacity}:
-                parseInt(tile.user_id) === 3 ? { color: 'red', opacity: tile.opacity, fillOpacity: tile.opacity}:
-                { color: 'purple', opacity: tile.opacity, fillOpacity: tile.opacity}
-              } ></Rectangle>
+                {color: colors[parseInt(tile.user_ids[0])-1], opacity: tile.opacity, fillOpacity: tile.opacity}
+              }></Rectangle>
             )}
             <LocationMarker />
           </MapContainer> 

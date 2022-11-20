@@ -13,6 +13,7 @@ import user4Pic from '../../assets/user4photo.jpg';
 
 const Leaderboard = ({leaderboard}) => {
 
+    const colors = ['blue','purple','orange','red'];
     const userAvatars = [user1Pic, user2Pic, user3Pic, user4Pic];
     const sortLeaderboard = (leaderboard) => {
         leaderboard.sort(function (a, b) {
@@ -26,14 +27,12 @@ const Leaderboard = ({leaderboard}) => {
     return (
         <List>
 
-            {console.log(leaderboard)}
             {leaderboard.map((user, index) =>
                 <>
                     <Divider/>
                     <ListItem
                         key={index}
                     >
-                        {console.log(index)}
                         {index === 0 ? <ListItemAvatar>
                                 <Avatar alt="first-prize" src={firstPrize}/>
                             </ListItemAvatar> :
@@ -44,7 +43,8 @@ const Leaderboard = ({leaderboard}) => {
                                     <Avatar alt="third-prize" src={thirdPrize}/>
                                 </ListItemAvatar> : null
                         }
-                        <Avatar alt="profile-pic" src={userAvatars[user.user_id]}/>
+
+                        <Avatar style={({border: 'solid 5px', borderColor:colors[user.user_id-1]})} alt="profile-pic" src={userAvatars[user.user_id-1]}></Avatar>
                         <ListItemText style={({marginLeft: '10px' })} primary={user.user_name} secondary={"Score: " + user.score} />
                     </ListItem>
 
