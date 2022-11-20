@@ -16,17 +16,19 @@ import {getAllIssues,uploadIssuePic} from '../../services/api/issue.services';
 import { getAllTiles } from '../../services/api/map.services';
 
 import profilePic from "../../assets/user1photo.jpg";
-import { getUserById } from '../../services/api/user.services';
+import { getLeaderBoard, getUserById } from '../../services/api/user.services';
+import Leaderboard from '../../components/Leaderboard/Leaderboard';
 
 const PlayerProfile = () => {
 
     // const BounceInAnimation = keyframes`${BounceIn}`;
     // const BounceInDiv = styled.div`animation: infinite 5s ${BounceInAnimation};`;
 
-    const [userId, setUserId]=useState(1);
+    const [userId, setUserId]=useState(2);
     const [user, setUser] = useState({})
     const [issues,setIssues] = useState([]);
     const [tiles,setTiles] = useState([]);
+    const [leaderboard,setLeaderboard] = useState([])
     const [showScoreAnimation,toggleScoreAnimation] = useState(false);
     async function handleGetAllIssues() {
         await getAllIssues().then(async (issues) => {
@@ -41,8 +43,14 @@ const PlayerProfile = () => {
         )
     }
     async function handleGetUserById(){
-        await getUserById().then(async(user)=>{
+        await getUserById(userId).then(async(user)=>{
             setUser(user);
+        })
+    }
+
+    async function handleGetLeaderBoard(){
+        await getLeaderBoard().then(async(leaderboard)=>{
+            setLeaderboard(leaderboard);
         })
     }
 
@@ -67,6 +75,7 @@ const PlayerProfile = () => {
         handleGetAllIssues();
         handleGetAllTiles();
         handleGetUserById();
+        handleGetLeaderBoard();
     }, []);
 
     // React.useEffect(()=>{
@@ -89,6 +98,9 @@ const PlayerProfile = () => {
                     handleUploadIssuePic={handleUploadIssuePic}
                 />
                 
+            </Grid>
+            <Grid item>
+                <Leaderboard leaderboard={leaderboard}/>
             </Grid>
             <Grid item>
                 <Navbar toggleScoreUpdate={showScoreAnimation}/>

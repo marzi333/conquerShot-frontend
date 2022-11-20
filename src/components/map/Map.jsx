@@ -7,10 +7,11 @@ import castleIcon from "../../assets/castle.png";
 import towerIcon from "../../assets/tower.png";
 import villageIcon from "../../assets/village.png";
 import conqueredIcon from "../../assets/conquered.png";
+import swords from "../../assets/swords.png";
 import { Icon } from "leaflet";
 import Legend from "./Legend";
 import ChangeView from "./ChangeView";
-import { IconButton, Input } from "@mui/material";
+import { Avatar, IconButton, Input } from "@mui/material";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 export default function Map({
   searchOptionIndex,
@@ -26,6 +27,7 @@ export default function Map({
   const [map, setMap] = React.useState(null);
   const [optionIndexChanged, setOptionIndexChanged] = React.useState(false);
   const [center] = React.useState([48.136642566675825, 11.575330343104591]);
+  const colors = ['blue','purple','orange','red'];
   const icons  = {'tower':towerIcon, 'castle':castleIcon, 'village':villageIcon}
   return (
     <div id="map">
