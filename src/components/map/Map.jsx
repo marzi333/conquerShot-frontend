@@ -4,10 +4,11 @@ import "leaflet/dist/leaflet.css";
 import "./styles.css";
 import markerIconGreen from "../../assets/marker-icon-green.png";
 import conqueredIcon from "../../assets/conquered.png";
+import swords from "../../assets/swords.png";
 import { Icon } from "leaflet";
 import Legend from "./Legend";
 import ChangeView from "./ChangeView";
-import { IconButton, Input } from "@mui/material";
+import { Avatar, IconButton, Input } from "@mui/material";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 export default function Map({
   searchOptionIndex,
@@ -23,7 +24,7 @@ export default function Map({
   const [map, setMap] = React.useState(null);
   const [optionIndexChanged, setOptionIndexChanged] = React.useState(false);
   const [center] = React.useState([48.136642566675825, 11.575330343104591]);
-
+  const colors = ['blue','purple','orange','red'];
   return (
     <div id="map">
       {/* map */}
@@ -72,12 +73,15 @@ export default function Map({
               )
             }
             {tiles.map((tile,index) => 
-              <Rectangle key={index} bounds={tile.bounds} pathOptions={
-                parseInt(tile.user_id) === 1 ? { color: 'blue', opacity: 0.5 }:
-                parseInt(tile.user_id) === 2 ? { color: 'orange', opacity: 0.5 }:
-                parseInt(tile.user_id) === 3 ? { color: 'red', opacity: 0.5 }:
-                { color: 'purple', opacity: 0.5 }
-              } />
+              {
+              return <Rectangle key={index} bounds={tile.bounds} pathOptions={
+                
+                { color: colors[parseInt(tile.user_ids[0])-1], opacity: 1-(1/tile.max_score) }
+              }
+               >
+                
+               </Rectangle>}
+               
             )}
           </MapContainer> 
           </div>
