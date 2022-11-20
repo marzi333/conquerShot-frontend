@@ -1,8 +1,9 @@
 import React from "react";
-import { MapContainer, TileLayer, Marker, Popup, SVGOverlay, Rectangle } from "react-leaflet";
+import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, SVGOverlay, Rectangle, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./styles.css";
-import markerIconGreen from "../../assets/marker-icon-green.png";
+import pinIcon from "../../assets/pin.png";
 import castleIcon from "../../assets/castle.png";
 import towerIcon from "../../assets/tower.png";
 import villageIcon from "../../assets/village.png";
@@ -13,6 +14,7 @@ import Legend from "./Legend";
 import ChangeView from "./ChangeView";
 import { Avatar, IconButton, Input } from "@mui/material";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import L from "leaflet";
 export default function Map({
   searchOptionIndex,
   longitude,
@@ -24,6 +26,43 @@ export default function Map({
   searchClicked,
   handleUploadIssuePic
 }) {
+  function LocationMarker() {
+    const [position, setPosition] = useState(null);
+    const [bbox, setBbox] = useState([]);
+
+    const map = useMap();
+    const icon = L.icon({
+      iconSize: [25, 41],
+      iconAnchor: [10, 41],
+      popupAnchor: [2, -40],
+      iconUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png",
+      shadowUrl: "https://unpkg.com/leaflet@1.6/dist/images/marker-shadow.png"
+    });
+
+    useEffect(() => {
+      map.locate().on("locationfound", function (e) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+        const radius = e.accuracy;
+        const circle = L.circle(e.latlng, radius);
+        circle.addTo(map);
+        setBbox(e.bounds.toBBoxString().split(","));
+      });
+    }, [map]);
+
+    return position === null ? null : (
+        <Marker position={position} icon={icon}>
+          <Popup>
+            You are here. <br />
+            Map bbox: <br />
+            <b>Southwest lng</b>: {bbox[0]} <br />
+            <b>Southwest lat</b>: {bbox[1]} <br />
+            <b>Northeast lng</b>: {bbox[2]} <br />
+            <b>Northeast lat</b>: {bbox[3]}
+          </Popup>
+        </Marker>
+    );
+  }
   const [map, setMap] = React.useState(null);
   const [optionIndexChanged, setOptionIndexChanged] = React.useState(false);
   const [center] = React.useState([48.136642566675825, 11.575330343104591]);
@@ -88,6 +127,7 @@ export default function Map({
                 { color: 'purple', opacity: tile.opacity, fillOpacity: tile.opacity}
               } ></Rectangle>
             )}
+            <LocationMarker />
           </MapContainer> 
           </div>
   );
